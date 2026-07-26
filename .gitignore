@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+data_wilayah.sql
+data_kodepos.json
+data_plat_nomor.json
+data_npsn*.json
