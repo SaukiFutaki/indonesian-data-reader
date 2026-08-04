@@ -49,3 +49,4 @@ data_npsn*.json
 scripts
 migrations
 AGENTS.md
+CLAUDE.md
