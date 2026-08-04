@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Indonesia Data Reader
 
-## Getting Started
+Parse and validate Indonesian identity and regional data — NIK, postal codes, license plates, and school data — through a single package and API.
 
-First, run the development server:
+## Features
+
+### NIK Reader
+
+Read and validate a 16-digit Indonesian ID number.
+
+**Format:** `PPBBCCDDMMYYXXXX`
+
+| Segment | Digits | Meaning |
+|---------|--------|---------|
+| PP | 1–2 | Province code |
+| BB | 3–4 | Regency/city code |
+| CC | 5–6 | District code |
+| DD | 7–8 | Day of birth (add 40 for women) |
+| MM | 9–10 | Month of birth |
+| YY | 11–12 | Year of birth (last two digits) |
+| XXXX | 13–16 | Serial number |
+
+Reference: [Wikipedia — Nomor Induk Kependudukan](https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan)
+
+```
+POST /api/v0/nik
+{ "nik": "3174040123450001" }
+
+→ {
+    provinsi: "DKI Jakarta",
+    kabupaten: "Jakarta Pusat",
+    kecamatan: "Menteng",
+    jenis_kelamin: "LAKI-LAKI",
+    tanggal_lahir: "2001-04-01"
+  }
+```
+
+### Kode Pos
+
+Search by postal code or village name. 92,000+ villages with coordinates and elevation.
+
+**Format:** 5-digit code `ABCDE`
+
+| Digit | Meaning |
+|-------|---------|
+| A | Postal region |
+| B–C | City/regency |
+| D | District |
+| E | Village/sub-district |
+
+Reference: [Wikipedia — Kode pos](https://id.wikipedia.org/wiki/Kode_pos)
+
+```
+POST /api/v0/kodepos
+{ "code": 40115 }
+
+→ {
+    kelurahan: "Ciroyom",
+    kecamatan: "Andir",
+    kabupaten: "Kota Bandung",
+    provinsi: "Jawa Barat",
+    latitude: -6.9093,
+    longitude: 107.5838
+  }
+```
+
+### Plat Nomor
+
+Decode Indonesian vehicle license plate area codes to region, police jurisdiction, and island.
+
+**Format:** `K NNNN XX` — 1–2 letter area code followed by registration number and series.
+
+Reference: [Wikipedia — Tanda Nomor Kendaraan Bermotor Indonesia](https://id.wikipedia.org/wiki/Tanda_Nomor_Kendaraan_Bermotor_Indonesia)
+
+```
+POST /api/v0/plat
+{ "kode": "B" }
+
+→ {
+    wilayah: "DKI Jakarta, Depok, Tangerang, Bekasi",
+    polda: "Polda Metro Jaya",
+    pulau: "Jawa"
+  }
+```
+
+61 codes covering all 38 provinces across Sumatra, Java, Kalimantan, Sulawesi, Nusa Tenggara, Maluku, and Papua.
+
+### NPSN
+
+Look up school details by 8-digit National School ID assigned by Kemendikbud. 213,000+ schools from PAUD through SMA/SMK, including coordinates.
+
+Reference: [Wikipedia — Nomor Pokok Sekolah Nasional](https://id.wikipedia.org/wiki/Nomor_pokok_sekolah_nasional)
+
+```
+POST /api/v0/npsn
+{ "npsn": "20104775" }
+
+→ {
+    nama: "SD MELANIA III",
+    jenjang: "SD",
+    status: "Swasta",
+    alamat: "Jl. Percetakan Negara No. 31",
+    kabupaten: "Kota Jakarta Pusat",
+    provinsi: "DKI Jakarta",
+    lintang: -6.1824,
+    bujur: 106.8667
+  }
+```
+
+## Data
+
+| Dataset | Records | Storage |
+|---------|---------|---------|
+| Administrative regions (province → village) | 91,162 | Hardcoded (Map lookup, O(1)) |
+| Postal codes | 83,761 | Turso + Drizzle ORM |
+| License plates | 61 | Hardcoded |
+| Schools (NPSN) | 213,195 | Turso + Drizzle ORM |
+
+Total: ~388,000 records covering all 38 provinces of Indonesia. Indexed for fast search by name, code, and region.
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
+cp .env.example .env  # TURSO_CONNECTION_URL and TURSO_AUTH_TOKEN
+bunx drizzle-kit migrate
+bun run scripts/seed.ts
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## License
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
