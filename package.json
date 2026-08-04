@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@cloudflare/kumo": "^2.9.0",
     "@libsql/client": "^0.17.4",
+    "@phosphor-icons/react": "^2.1.10",
     "dotenv": "^17.4.2",
-    "drizzle-orm": "^1.0.0-rc.4",
+    "drizzle-orm": "^0.45.2",
     "next": "16.2.12",
     "react": "19.2.4",
     "react-dom": "19.2.4"
@@ -21,7 +23,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "drizzle-kit": "^1.0.0-rc.4",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
