@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { TRPCReactProvider } from "@/lib/trpc/client";
 import { TooltipProvider } from "@cloudflare/kumo";
-import { DockWrapper } from "@/components/dock-wrapper";
+import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,8 +17,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Indonesia Data Reader",
-  description: "Validasi data identitas Indonesia: NIK, kode pos, plat nomor, dan NPSN.",
+  title: {
+    default: "Indonesia Data Reader",
+    template: "%s — Indonesia Data Reader",
+  },
+  description:
+    "Baca & validasi data identitas Indonesia: NIK, kode pos, plat nomor, dan NPSN. Gratis, cepat, langsung di browser.",
+  metadataBase: new URL("https://indonesia-data-reader.vercel.app"),
 };
 
 export default function RootLayout({
@@ -27,13 +33,15 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-slate-50/60 text-slate-900">
         <TRPCReactProvider>
           <TooltipProvider>
-            <DockWrapper>{children}</DockWrapper>
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
           </TooltipProvider>
         </TRPCReactProvider>
       </body>

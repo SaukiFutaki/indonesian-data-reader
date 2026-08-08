@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useCallback, useEffect, useState } from "react";
-import { cn } from "@cloudflare/kumo";
+import { cn } from "@/lib/utils";
 
 export interface Segment {
   id: string;
@@ -10,7 +10,7 @@ export interface Segment {
   type: "numeric" | "alpha" | "alphanumeric";
   placeholder: string;
   hint?: string;
-  color?: string; // tailwind color class for the accent
+  color?: string;
 }
 
 interface SegmentedInputProps {
@@ -40,7 +40,6 @@ export function SegmentedInput({
 
   const totalLength = segments.reduce((sum, s) => sum + s.maxLength, 0);
 
-  // Split the combined value into per-segment values
   const segmentValues = getSegmentValues(value, segments);
 
   function getSegmentValues(val: string, segs: Segment[]): string[] {
@@ -53,12 +52,10 @@ export function SegmentedInput({
     return result;
   }
 
-  // Combine segment values back into a single string
   function combineValues(segVals: string[]): string {
     return segVals.join("");
   }
 
-  // Filter input based on segment type
   function filterInput(text: string, type: Segment["type"]): string {
     switch (type) {
       case "numeric":
@@ -72,7 +69,6 @@ export function SegmentedInput({
     }
   }
 
-  // Update glow position to track focused input
   const updateGlow = useCallback(
     (index: number | null) => {
       if (index === null || !containerRef.current) {
@@ -100,7 +96,6 @@ export function SegmentedInput({
     updateGlow(focusedIndex);
   }, [focusedIndex, updateGlow]);
 
-  // Also update on resize
   useEffect(() => {
     const handleResize = () => updateGlow(focusedIndex);
     window.addEventListener("resize", handleResize);
@@ -118,11 +113,9 @@ export function SegmentedInput({
       const combined = combineValues(newSegVals);
       onChange(combined);
 
-      // Auto-advance to next segment when current is full
       if (capped.length >= segment.maxLength && index < segments.length - 1) {
         const nextInput = inputRefs.current[index + 1];
         if (nextInput) {
-          // Small delay to let state update first
           requestAnimationFrame(() => {
             nextInput.focus();
             nextInput.setSelectionRange(0, 0);
@@ -130,7 +123,6 @@ export function SegmentedInput({
         }
       }
 
-      // Check if complete
       const totalFilled = combined.replace(/\s/g, "").length;
       if (totalFilled >= totalLength && onComplete) {
         onComplete(combined);
@@ -144,7 +136,6 @@ export function SegmentedInput({
       const input = inputRefs.current[index];
       if (!input) return;
 
-      // Backspace at start → go to previous segment
       if (
         e.key === "Backspace" &&
         input.selectionStart === 0 &&
@@ -160,7 +151,6 @@ export function SegmentedInput({
         }
       }
 
-      // ArrowLeft at start → go to previous segment
       if (e.key === "ArrowLeft" && input.selectionStart === 0 && index > 0) {
         e.preventDefault();
         const prevInput = inputRefs.current[index - 1];
@@ -171,7 +161,6 @@ export function SegmentedInput({
         }
       }
 
-      // ArrowRight at end → go to next segment
       if (
         e.key === "ArrowRight" &&
         input.selectionStart === input.value.length &&
@@ -188,13 +177,11 @@ export function SegmentedInput({
     [segments.length]
   );
 
-  // Handle paste — distribute across segments
   const handlePaste = useCallback(
     (index: number, e: React.ClipboardEvent<HTMLInputElement>) => {
       e.preventDefault();
       const pasted = e.clipboardData.getData("text").replace(/\s/g, "");
 
-      // If pasting what looks like a full value, distribute from segment 0
       const startIndex = pasted.length >= totalLength * 0.8 ? 0 : index;
 
       const newSegVals = [...segmentValues];
@@ -211,7 +198,6 @@ export function SegmentedInput({
       const combined = combineValues(newSegVals);
       onChange(combined);
 
-      // Focus last segment with content or the next empty one
       requestAnimationFrame(() => {
         let focusIdx = segments.length - 1;
         for (let i = startIndex; i < segments.length; i++) {
@@ -239,7 +225,6 @@ export function SegmentedInput({
   );
 
   const handleBlur = useCallback(() => {
-    // Delay to check if focus moved to another segment
     requestAnimationFrame(() => {
       if (containerRef.current && !containerRef.current.contains(document.activeElement)) {
         setFocusedIndex(null);
@@ -251,19 +236,19 @@ export function SegmentedInput({
     <div
       ref={containerRef}
       className={cn(
-        "segmented-input-container relative flex flex-wrap items-start gap-2",
+        "segmented-input-container relative flex flex-nowrap sm:flex-wrap items-start justify-between sm:justify-start gap-1 sm:gap-2 overflow-x-auto pb-1 max-w-full",
         className
       )}
     >
       {/* Sliding glow indicator */}
       {glowRect && (
         <div
-          className="segment-glow pointer-events-none absolute z-0 rounded-xl"
+          className="segment-glow pointer-events-none absolute z-0 rounded-lg sm:rounded-xl"
           style={{
-            left: glowRect.left - 3,
-            top: glowRect.top - 3,
-            width: glowRect.width + 6,
-            height: glowRect.height + 6,
+            left: glowRect.left - 2,
+            top: glowRect.top - 2,
+            width: glowRect.width + 4,
+            height: glowRect.height + 4,
             transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
           }}
         />
@@ -275,12 +260,7 @@ export function SegmentedInput({
         const isFilled = segValue.length >= segment.maxLength;
 
         return (
-          <div key={segment.id} className="segment-wrapper relative z-10 flex flex-col items-center gap-1.5">
-            {/* Dot separator (not on first) */}
-            {index > 0 && (
-              <div className="segment-dot absolute -left-[7px] top-[20px] h-1.5 w-1.5 rounded-full bg-kumo-subtle/40" />
-            )}
-
+          <div key={segment.id} className="segment-wrapper relative z-10 flex flex-col items-center gap-1 shrink-0">
             <input
               ref={(el) => { inputRefs.current[index] = el; }}
               type="text"
@@ -294,33 +274,33 @@ export function SegmentedInput({
               onFocus={() => handleFocus(index)}
               onBlur={handleBlur}
               className={cn(
-                "segment-input font-mono text-center transition-all duration-200",
-                "rounded-xl border bg-kumo-surface text-kumo-text",
-                "placeholder:text-kumo-subtle/30",
+                "segment-input font-mono text-center transition-all duration-150 tracking-wider",
+                "rounded-lg sm:rounded-xl border bg-white text-zinc-950",
+                "placeholder:text-zinc-400 font-bold",
                 "focus:outline-none",
                 isFocused
-                  ? "border-kumo-brand shadow-sm"
+                  ? "border-zinc-950 ring-2 ring-zinc-950/20 shadow-xs"
                   : isFilled
-                    ? "border-kumo-border/80"
-                    : "border-kumo-border/50",
-                // Dynamic width based on maxLength
-                segment.maxLength <= 1 && "w-11 h-11 text-lg",
-                segment.maxLength === 2 && "w-14 h-11 text-lg",
-                segment.maxLength === 3 && "w-16 h-11 text-base",
-                segment.maxLength === 4 && "w-[4.5rem] h-11 text-base",
-                segment.maxLength === 5 && "w-20 h-11 text-base",
-                segment.maxLength === 6 && "w-24 h-11 text-base",
-                segment.maxLength === 8 && "w-32 h-11 text-base"
+                    ? "border-zinc-300 bg-zinc-100/50"
+                    : "border-zinc-200",
+                // Compact responsive sizes on mobile:
+                segment.maxLength <= 1 && "w-9 h-9 text-xs sm:w-11 sm:h-11 sm:text-lg px-1",
+                segment.maxLength === 2 && "w-10 sm:w-14 h-9 sm:h-11 text-xs sm:text-lg px-1",
+                segment.maxLength === 3 && "w-12 sm:w-16 h-9 sm:h-11 text-xs sm:text-base px-1",
+                segment.maxLength === 4 && "w-14 sm:w-[4.5rem] h-9 sm:h-11 text-xs sm:text-base px-1",
+                segment.maxLength === 5 && "w-16 sm:w-20 h-9 sm:h-11 text-xs sm:text-base px-1",
+                segment.maxLength === 6 && "w-20 sm:w-24 h-9 sm:h-11 text-xs sm:text-base px-1",
+                segment.maxLength === 8 && "w-24 sm:w-32 h-9 sm:h-11 text-xs sm:text-base px-1"
               )}
               aria-label={segment.label}
             />
 
             <span
               className={cn(
-                "segment-label text-[10px] font-medium tracking-wide transition-colors duration-200",
+                "segment-label text-[9px] sm:text-[10px] font-bold tracking-tight transition-colors duration-150 truncate max-w-[4rem] sm:max-w-none text-center",
                 isFocused
-                  ? "text-kumo-brand"
-                  : "text-kumo-subtle/70"
+                  ? "text-zinc-950"
+                  : "text-zinc-500"
               )}
             >
               {segment.label}

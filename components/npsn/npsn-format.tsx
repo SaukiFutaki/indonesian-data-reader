@@ -1,35 +1,35 @@
-"use client";
-
-import { LayerCard } from "@cloudflare/kumo";
+import { Info } from "lucide-react";
 
 export function NpsnFormat() {
   return (
-    <LayerCard className="mt-4">
-      <div className="space-y-3">
-        <div>
-          <h3 className="text-sm font-semibold">NPSN — Nomor Pokok Sekolah Nasional</h3>
-          <p className="text-xs text-kumo-subtle mt-1">
-            Kode pengenal 8 digit unik yang diberikan Kemendikbud kepada setiap satuan pendidikan aktif di Indonesia.
-          </p>
-        </div>
-
-        {/* Visual example */}
-        <div className="flex justify-center">
-          <span className="font-mono text-lg font-semibold bg-kumo-overlay px-6 py-2.5 rounded-lg border border-kumo-border/60 tracking-[0.25em] tabular-nums">
-            20104775
-          </span>
-        </div>
-
-        <div className="flex justify-center gap-6 text-[10px] text-kumo-subtle">
-          <span>8 digit numerik</span>
-          <span>·</span>
-          <span>unik per sekolah</span>
-        </div>
-
-        <p className="text-[10px] text-kumo-subtle/60 pt-1 border-t border-kumo-border/30">
-          213.000+ sekolah: PAUD, SD/MI, SMP/MTs, SMA/SMK/MA di seluruh Indonesia.
-        </p>
+    <section className="mt-8 sm:mt-10 rounded-2xl border border-zinc-200 bg-white p-4 sm:p-6 shadow-xs">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4">
+        <Info className="h-4 w-4 sm:h-5 sm:w-5 text-zinc-950" />
+        <h2 className="text-xs sm:text-sm font-bold tracking-tight text-zinc-950 uppercase">
+          Mengenai Nomor Pokok Sekolah Nasional (NPSN)
+        </h2>
       </div>
-    </LayerCard>
+
+      <div className="space-y-3 sm:space-y-4 text-xs leading-relaxed text-zinc-600">
+        <p>
+          NPSN adalah kode pengenal 8 digit unik yang diterbitkan oleh Pusat Data dan Teknologi Informasi (Pusdatin) Kemendikbudristek untuk seluruh satuan pendidikan aktif di Indonesia.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-1 sm:pt-2">
+          <div className="rounded-xl border border-zinc-300 bg-zinc-100/60 p-3 text-center">
+            <span className="font-mono text-base sm:text-lg font-bold text-zinc-950 block">213.000+</span>
+            <span className="text-[11px] font-semibold text-zinc-700 mt-0.5 block">Sekolah Terdaftar</span>
+          </div>
+          <div className="rounded-xl border border-zinc-300 bg-zinc-100/60 p-3 text-center">
+            <span className="font-mono text-base sm:text-lg font-bold text-zinc-950 block">8 Digit</span>
+            <span className="text-[11px] font-semibold text-zinc-700 mt-0.5 block">Nomor Unik Permanen</span>
+          </div>
+          <div className="rounded-xl border border-zinc-300 bg-zinc-100/60 p-3 text-center">
+            <span className="font-mono text-base sm:text-lg font-bold text-zinc-950 block">Semua Jenjang</span>
+            <span className="text-[11px] font-semibold text-zinc-700 mt-0.5 block">PAUD s/d SMA / SMK</span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
