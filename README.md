@@ -1,133 +1,108 @@
 # Indonesia Data Reader
 
-Parse and validate Indonesian identity and regional data — NIK, postal codes, license plates, and school data — through a single package and API.
+**Indonesia Data Reader** is a high-performance, unified platform and REST API for parsing, validating, and inspecting Indonesian identity and regional data — including 16-digit NIK numbers, 5-digit postal codes, vehicle license plates (with sub-region decoding), and 8-digit National School IDs (NPSN).
 
-## Features
+---
 
-### NIK Reader
+## Key Modules
 
-Read and validate a 16-digit Indonesian ID number.
+### 1. NIK Reader (Nomor Induk Kependudukan)
+Parse and validate 16-digit Indonesian national identification numbers (`PPBBCCDDMMYYXXXX`). Extract province, regency/city, district, gender (DD + 40 rule for females), and date of birth automatically.
 
-**Format:** `PPBBCCDDMMYYXXXX`
-
-| Segment | Digits | Meaning |
-|---------|--------|---------|
-| PP | 1–2 | Province code |
-| BB | 3–4 | Regency/city code |
-| CC | 5–6 | District code |
-| DD | 7–8 | Day of birth (add 40 for women) |
-| MM | 9–10 | Month of birth |
-| YY | 11–12 | Year of birth (last two digits) |
-| XXXX | 13–16 | Serial number |
-
-Reference: [Wikipedia — Nomor Induk Kependudukan](https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan)
-
-```
-POST /api/v0/nik
-{ "nik": "3174040123450001" }
-
-→ {
-    provinsi: "DKI Jakarta",
-    kabupaten: "Jakarta Pusat",
-    kecamatan: "Menteng",
-    jenis_kelamin: "LAKI-LAKI",
-    tanggal_lahir: "2001-04-01"
-  }
+- **Endpoint**: `POST /api/v0/nik`
+- **Payload**: `{ "nik": "3204214501900001" }`
+- **Response**:
+```json
+{
+  "provinsi": "Jawa Barat",
+  "kabupaten": "Kabupaten Bandung",
+  "kecamatan": "Ciparay",
+  "jenis_kelamin": "PEREMPUAN",
+  "tanggal_lahir": "1990-01-05",
+  "nomor_urut": "0001"
+}
 ```
 
-### Kode Pos
+---
 
-Search by postal code or village name. 92,000+ villages with coordinates and elevation.
+### 2. Kode Pos (Postal Code & Location Lookup)
+Look up full address hierarchies (province, regency, district, village) and geographical coordinates (latitude & longitude) by 5-digit postal code or village name search across **92,000+ villages**.
 
-**Format:** 5-digit code `ABCDE`
-
-| Digit | Meaning |
-|-------|---------|
-| A | Postal region |
-| B–C | City/regency |
-| D | District |
-| E | Village/sub-district |
-
-Reference: [Wikipedia — Kode pos](https://id.wikipedia.org/wiki/Kode_pos)
-
-```
-POST /api/v0/kodepos
-{ "code": 40115 }
-
-→ {
-    kelurahan: "Ciroyom",
-    kecamatan: "Andir",
-    kabupaten: "Kota Bandung",
-    provinsi: "Jawa Barat",
-    latitude: -6.9093,
-    longitude: 107.5838
-  }
+- **Endpoint**: `POST /api/v0/kodepos`
+- **Payload**: `{ "code": 40115 }` or `{ "query": "Braga" }`
+- **Response**:
+```json
+{
+  "kelurahan": "Ciroyom",
+  "kecamatan": "Andir",
+  "kabupaten": "Kota Bandung",
+  "provinsi": "Jawa Barat",
+  "kode_pos": 40115,
+  "latitude": -6.9093,
+  "longitude": 107.5838
+}
 ```
 
-### Plat Nomor
+---
 
-Decode Indonesian vehicle license plate area codes to region, police jurisdiction, and island.
+### 3. Plat Nomor (Vehicle License Plate & Sub-Region Decoder)
+Decode 61 regional area codes (`B`, `D`, `H`, `BK`, etc.), Police Jurisdictions (Polda), sub-regions (specific cities/regencies derived from suffix letters), and vehicle types derived from registration number ranges.
 
-**Format:** `K NNNN XX` — 1–2 letter area code followed by registration number and series.
-
-Reference: [Wikipedia — Tanda Nomor Kendaraan Bermotor Indonesia](https://id.wikipedia.org/wiki/Tanda_Nomor_Kendaraan_Bermotor_Indonesia)
-
-```
-POST /api/v0/plat
-{ "kode": "B" }
-
-→ {
-    wilayah: "DKI Jakarta, Depok, Tangerang, Bekasi",
-    polda: "Polda Metro Jaya",
-    pulau: "Jawa"
-  }
-```
-
-61 codes covering all 38 provinces across Sumatra, Java, Kalimantan, Sulawesi, Nusa Tenggara, Maluku, and Papua.
-
-### NPSN
-
-Look up school details by 8-digit National School ID assigned by Kemendikbud. 213,000+ schools from PAUD through SMA/SMK, including coordinates.
-
-Reference: [Wikipedia — Nomor Pokok Sekolah Nasional](https://id.wikipedia.org/wiki/Nomor_pokok_sekolah_nasional)
-
-```
-POST /api/v0/npsn
-{ "npsn": "20104775" }
-
-→ {
-    nama: "SD MELANIA III",
-    jenjang: "SD",
-    status: "Swasta",
-    alamat: "Jl. Percetakan Negara No. 31",
-    kabupaten: "Kota Jakarta Pusat",
-    provinsi: "DKI Jakarta",
-    lintang: -6.1824,
-    bujur: 106.8667
-  }
+- **Endpoint**: `POST /api/v0/plat`
+- **Payload**: `{ "kode": "H 2222 ALW" }`
+- **Response**:
+```json
+{
+  "kode": "H",
+  "wilayah": "Jawa Tengah (Semarang, Salatiga, Kendal, Demak)",
+  "subWilayah": "Kota Semarang",
+  "jenisKendaraan": "Sepeda Motor",
+  "polda": "Polda Jateng",
+  "pulau": "Jawa"
+}
 ```
 
-## Data
+---
 
-| Dataset | Records | Storage |
-|---------|---------|---------|
-| Administrative regions (province → village) | 91,162 | Hardcoded (Map lookup, O(1)) |
-| Postal codes | 83,761 | Turso + Drizzle ORM |
-| License plates | 61 | Hardcoded |
-| Schools (NPSN) | 213,195 | Turso + Drizzle ORM |
+### 4. NPSN (Nomor Pokok Sekolah Nasional)
+Query school metadata for over **213,000+ active schools** across Indonesia (PAUD through SMA/SMK) by 8-digit NPSN code or school name.
 
-Total: ~388,000 records covering all 38 provinces of Indonesia. Indexed for fast search by name, code, and region.
-
-## Setup
-
-```bash
-bun install
-cp .env.example .env  # TURSO_CONNECTION_URL and TURSO_AUTH_TOKEN
-bunx drizzle-kit migrate
-bun run scripts/seed.ts
-bun dev
+- **Endpoint**: `POST /api/v0/npsn`
+- **Payload**: `{ "npsn": "20104775" }`
+- **Response**:
+```json
+{
+  "npsn": "20104775",
+  "nama": "SD MELANIA III",
+  "jenjang": "SD",
+  "status": "Swasta",
+  "alamat": "Jl. Percetakan Negara No. 31",
+  "kabupaten": "Kota Jakarta Pusat",
+  "provinsi": "DKI Jakarta"
+}
 ```
+
+---
+
+## Data Coverage
+
+| Dataset | Scope / Records | Indexing Method |
+|---------|-----------------|-----------------|
+| **Administrative Regions** | 91,162 Regencies & Districts | In-Memory Map Lookup |
+| **Postal Codes** | 83,761+ Villages with Coordinates | Database Index |
+| **License Plate Codes** | 61 Regional Codes + Sub-Region Decoder | In-Memory Pattern Matcher |
+| **National School Registry (NPSN)** | 213,195+ Schools (PAUD s/d SMA/SMK) | Database Index |
+
+---
+
+## Architecture & Privacy
+
+- **Zero Data Retention**: Identity queries are parsed transiently without persisting input data to server storage.
+- **Duo-Tone Monochrome Design**: Clean, accessible, high-contrast user interface engineered for web & mobile viewports.
+- **Search Engine Optimization**: Complete metadata, OpenGraph cards, dynamic XML sitemaps, and Schema.org JSON-LD structured data.
+
+---
 
 ## License
 
-MIT
+[MIT License](LICENSE)
