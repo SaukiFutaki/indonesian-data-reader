@@ -1,9 +1,16 @@
 import { drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client/http";
 
-const client = createClient({
-  url: process.env.TURSO_CONNECTION_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-});
+const url = process.env.TURSO_CONNECTION_URL;
+const authToken = process.env.TURSO_AUTH_TOKEN;
 
-export const db = drizzle(client);
+function createDb() {
+  if (!url || !authToken) {
+    // Build time / prerender: return a stub that never gets queried.
+    // Real queries only happen at runtime in the Worker, where env is set.
+    return drizzle(createClient({ url: "file:placeholder.db" }));
+  }
+  return drizzle(createClient({ url, authToken }));
+}
+
+export const db = createDb();
