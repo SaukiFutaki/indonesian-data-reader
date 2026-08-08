@@ -1,0 +1,287 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "be3dcefe-9a0d-4390-a50d-7a3b5c8863e5",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "kodepos": {
+      "name": "kodepos",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "code": {
+          "name": "code",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "village": {
+          "name": "village",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "district": {
+          "name": "district",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "regency": {
+          "name": "regency",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "province": {
+          "name": "province",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "latitude": {
+          "name": "latitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "longitude": {
+          "name": "longitude",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "elevation": {
+          "name": "elevation",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "timezone": {
+          "name": "timezone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "idx_kodepos_code": {
+          "name": "idx_kodepos_code",
+          "columns": [
+            "code"
+          ],
+          "isUnique": false
+        },
+        "idx_kodepos_village": {
+          "name": "idx_kodepos_village",
+          "columns": [
+            "village"
+          ],
+          "isUnique": false
+        },
+        "idx_kodepos_district": {
+          "name": "idx_kodepos_district",
+          "columns": [
+            "district"
+          ],
+          "isUnique": false
+        },
+        "idx_kodepos_province_regency": {
+          "name": "idx_kodepos_province_regency",
+          "columns": [
+            "province",
+            "regency"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "sekolah": {
+      "name": "sekolah",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "kode_prop": {
+          "name": "kode_prop",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "propinsi": {
+          "name": "propinsi",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "kode_kab_kota": {
+          "name": "kode_kab_kota",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "kabupaten_kota": {
+          "name": "kabupaten_kota",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "kode_kec": {
+          "name": "kode_kec",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "kecamatan": {
+          "name": "kecamatan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ref_id": {
+          "name": "ref_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "npsn": {
+          "name": "npsn",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sekolah": {
+          "name": "sekolah",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "bentuk": {
+          "name": "bentuk",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "alamat_jalan": {
+          "name": "alamat_jalan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "lintang": {
+          "name": "lintang",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bujur": {
+          "name": "bujur",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "sekolah_npsn_unique": {
+          "name": "sekolah_npsn_unique",
+          "columns": [
+            "npsn"
+          ],
+          "isUnique": true
+        },
+        "idx_sekolah_nama": {
+          "name": "idx_sekolah_nama",
+          "columns": [
+            "sekolah"
+          ],
+          "isUnique": false
+        },
+        "idx_sekolah_bentuk": {
+          "name": "idx_sekolah_bentuk",
+          "columns": [
+            "bentuk"
+          ],
+          "isUnique": false
+        },
+        "idx_sekolah_kabupaten": {
+          "name": "idx_sekolah_kabupaten",
+          "columns": [
+            "kabupaten_kota"
+          ],
+          "isUnique": false
+        },
+        "idx_sekolah_kecamatan": {
+          "name": "idx_sekolah_kecamatan",
+          "columns": [
+            "kecamatan"
+          ],
+          "isUnique": false
+        },
+        "idx_sekolah_propinsi_kabupaten": {
+          "name": "idx_sekolah_propinsi_kabupaten",
+          "columns": [
+            "propinsi",
+            "kabupaten_kota"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
