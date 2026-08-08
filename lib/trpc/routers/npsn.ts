@@ -1,6 +1,6 @@
 import { router, publicProcedure } from "../init";
 import { z } from "zod/v4";
-import { db } from "@/lib/db";
+import { getDb } from "@/lib/db";
 import { sekolah } from "@/lib/db/schema";
 import { eq, like, or } from "drizzle-orm";
 
@@ -20,7 +20,7 @@ export const npsnRouter = router({
   byNpsn: publicProcedure
     .input(z.string().min(8).max(8).regex(/^\d+$/))
     .query(async ({ input }) => {
-      const rows = await db
+      const rows = await getDb()
         .select()
         .from(sekolah)
         .where(eq(sekolah.npsn, input))
@@ -32,7 +32,7 @@ export const npsnRouter = router({
     .input(z.string().min(2).max(100))
     .query(async ({ input }) => {
       const expanded = expandAbbr(input);
-      const rows = await db
+      const rows = await getDb()
         .select()
         .from(sekolah)
         .where(
