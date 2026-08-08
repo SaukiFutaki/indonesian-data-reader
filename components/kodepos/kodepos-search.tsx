@@ -6,7 +6,7 @@ import { useTRPC } from "@/lib/trpc/client";
 import { useQuery } from "@tanstack/react-query";
 import { MapPin, Search } from "lucide-react";
 import { SegmentedInput, type Segment } from "@/components/ui";
-import { KodeposResultCard } from "@/components/kodepos";
+import { KodeposResultCard } from "@/components/kodepos/kodepos-result-card";
 
 const LeafletMap = dynamic(
   () => import("@/components/kodepos/leaflet-map").then((m) => m.LeafletMap),
