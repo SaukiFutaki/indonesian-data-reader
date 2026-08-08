@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     "kode wilayah NIK",
   ],
   alternates: {
-    canonical: "https://indonesia-data-reader.vercel.app/nik",
+    canonical: "https://bacadataindo.my.id/nik",
   },
   openGraph: {
     title: "Baca NIK Online — Cek Tanggal Lahir & Detail NIK KTP",
     description:
       "Baca 16 digit NIK KTP secara gratis. Tampilkan provinsi, kota, kecamatan, jenis kelamin, dan tanggal lahir.",
-    url: "https://indonesia-data-reader.vercel.app/nik",
+    url: "https://bacadataindo.my.id/nik",
     siteName: "Indonesia Data Reader",
     locale: "id_ID",
     type: "website",

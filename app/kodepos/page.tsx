@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     "peta kode pos",
   ],
   alternates: {
-    canonical: "https://indonesia-data-reader.vercel.app/kodepos",
+    canonical: "https://bacadataindo.my.id/kodepos",
   },
   openGraph: {
     title: "Cari Kode Pos Indonesia — Kelurahan, Kecamatan & Koordinat Peta",
     description:
       "Cari kelurahan, kecamatan, kabupaten, dan lokasi peta dari 5 digit kode pos Indonesia.",
-    url: "https://indonesia-data-reader.vercel.app/kodepos",
+    url: "https://bacadataindo.my.id/kodepos",
     siteName: "Indonesia Data Reader",
     locale: "id_ID",
     type: "website",

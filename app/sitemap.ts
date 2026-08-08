@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://indonesia-data-reader.vercel.app";
+  const baseUrl = "https://bacadataindo.my.id";
   const lastModified = new Date();
 
   const routes = [

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   description:
     "Baca & validasi data identitas Indonesia: NIK, kode pos, plat nomor, dan NPSN. Gratis, cepat, langsung di browser.",
-  metadataBase: new URL("https://indonesia-data-reader.vercel.app"),
+  metadataBase: new URL("https://bacadataindo.my.id"),
 };
 
 export default function RootLayout({

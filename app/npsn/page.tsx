@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     "nomor pokok sekolah nasional",
   ],
   alternates: {
-    canonical: "https://indonesia-data-reader.vercel.app/npsn",
+    canonical: "https://bacadataindo.my.id/npsn",
   },
   openGraph: {
     title: "Cek Data Sekolah (NPSN) — 213.000+ Sekolah Indonesia",
     description:
       "Cari sekolah berdasarkan 8 digit NPSN atau nama sekolah. Lengkap dengan jenjang, status, dan alamat.",
-    url: "https://indonesia-data-reader.vercel.app/npsn",
+    url: "https://bacadataindo.my.id/npsn",
     siteName: "Indonesia Data Reader",
     locale: "id_ID",
     type: "website",

@@ -18,13 +18,13 @@ export const metadata: Metadata = {
     "npsn sekolah",
   ],
   alternates: {
-    canonical: "https://indonesia-data-reader.vercel.app",
+    canonical: "https://bacadataindo.my.id",
   },
   openGraph: {
     title: "Indonesia Data Reader — Pembaca Data Identitas Indonesia",
     description:
       "Aplikasi web & library terbuka untuk membaca NIK, Kode Pos, Plat Nomor kendaraan, dan NPSN sekolah.",
-    url: "https://indonesia-data-reader.vercel.app",
+    url: "https://bacadataindo.my.id",
     siteName: "Indonesia Data Reader",
     locale: "id_ID",
     type: "website",
@@ -78,7 +78,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Indonesia Data Reader",
-    url: "https://indonesia-data-reader.vercel.app",
+    url: "https://bacadataindo.my.id",
     applicationCategory: "UtilityApplication",
     operatingSystem: "Any",
     description: "Satu alat untuk membaca NIK, Kode Pos, Plat Nomor Kendaraan, dan NPSN Sekolah Indonesia.",
@@ -141,7 +141,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Feature Bento Grid (Monochrome B&W) */}
+        {/* Feature Bento Grid */}
         <section className="mt-10 animate-fade-up" style={{ animationDelay: "120ms" }}>
           <h2 className="text-base font-bold tracking-tight text-zinc-950 mb-3">
             Pilih Modul Pembaca
@@ -182,7 +182,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Developer API Info Box (Monochrome B&W) */}
+        {/* Developer API Info Box */}
         <section className="mt-10 animate-fade-up" style={{ animationDelay: "180ms" }}>
           <div className="rounded-2xl border border-zinc-300 bg-zinc-100/70 p-5 shadow-xs">
             <div className="flex items-center gap-2 mb-1.5">

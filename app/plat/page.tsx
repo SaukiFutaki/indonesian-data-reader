@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     "kode wilayah plat nomor",
   ],
   alternates: {
-    canonical: "https://indonesia-data-reader.vercel.app/plat",
+    canonical: "https://bacadataindo.my.id/plat",
   },
   openGraph: {
     title: "Cek Kode Plat Nomor Kendaraan Indonesia — Wilayah & Polda",
     description:
       "Cek kode plat kendaraan Indonesia — wilayah, Polda, dan pulau dari 61 kode plat di seluruh Indonesia.",
-    url: "https://indonesia-data-reader.vercel.app/plat",
+    url: "https://bacadataindo.my.id/plat",
     siteName: "Indonesia Data Reader",
     locale: "id_ID",
     type: "website",
